@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?><DocumentData>
-<ProductVersion>8.5.3.0</ProductVersion>
+<ProductVersion>8.2.0.0</ProductVersion>
 <ProductID>{ABF9EF9E-ECF6-4019-8A3E-908A6CFF4D1A}</ProductID>
 <IRProductName>AutoPlay Media Studio 8</IRProductName>
 <ProductType>Commercial</ProductType>
@@ -18,7 +18,7 @@ Please read the manual/help file if your stuck before you go crazy asking people
 
 Enjoy the example.</Comments>
 <CreatedVersion>8.1.0.0 (Professional Edition)</CreatedVersion>
-<LastSavedVersion>8.3.0.0 (Professional Edition Commercial)</LastSavedVersion>
+<LastSavedVersion>8.2.0.0 (Professional Edition Commercial)</LastSavedVersion>
 </DocInfo>
 <ProjectInfo ToolTipStyle="0">
 <Office2007Theme Theme="5"/>
@@ -69,14 +69,27 @@ Enjoy the example.</Comments>
 <Tracks/>
 </AudioBGMusic>
 <Globals>
-<Script>Bub = {
+<Script>--[[
+
+	Bud a AutoPlay Media Studio Example App created by Kingzooly
+
+]]--
+
+
+-- This table isn't just a example on how to create a table 
+-- but it's got important information for this software to work
+Bub = {
 	-- Example Version
-	Version = '0.0.0.3',
+	Version = '0.0.0.4',
 	-- Game Defaults
 	Game = {
+		-- A score/stats table
 		Gold = {
+			-- The name of the label element useful for calling later
 			Handle = 'Goldtxt', 
+			-- A default starting point for gold.
 			Default = 3000,
+			-- The bonus options defatult boost's preset.
 			Boost = 25
 		}, 
 		XP = {
@@ -129,6 +142,9 @@ function Bub.Feed()
 			if not Bub.Cost() then
 				return Bub.Lost()
 			end
+			SetDirt = Math.Random(1, 8);
+			Plugin.SetSize("Clean_Bar", Plugin.GetSize("Clean_Bar").Width-SetDirt, Plugin.GetSize("Clean_Bar").Height); 
+			Bub.Poop();
 			Bub.Update(Bub.Game.Gold.Handle, Bub.Game.Gold.Default);
 			Bub.Update(Bub.Game.XP.Handle, Bub.Game.XP.Default);
 			Bub.Update(Bub.Game.Health.Handle, Bub.Game.Health.Default);
@@ -162,7 +178,10 @@ function Bub.Play(sMode)
 				if not Bub.Cost() then
 					return Bub.Lost()
 				end
-				Plugin.SetSize("Play_Bar", "76", Plugin.GetSize("Play_Bar").Height);  
+				Plugin.SetSize("Play_Bar", "76", Plugin.GetSize("Play_Bar").Height);
+				SetDirt = Math.Random(3, 12);
+				Plugin.SetSize("Clean_Bar", Plugin.GetSize("Clean_Bar").Width-SetDirt, Plugin.GetSize("Clean_Bar").Height); 
+				Bub.Poop();
 				Bub.Update(Bub.Game.Gold.Handle, Bub.Game.Gold.Default);
 				Bub.Update(Bub.Game.XP.Handle, Bub.Game.XP.Default);
 				Bub.Update(Bub.Game.Health.Handle, Bub.Game.Health.Default);
@@ -216,6 +235,8 @@ function Bub.Update(sObject, sText)
 	Label.SetText(sObject, tostring(sText));
 end
 
+
+-- XP/Health/Gold Stats updater from 0.0.0.3
 function Bub.UpdateStats(sStat, nStat, nOption)
 		
 	-- Update the XP Stat	
@@ -314,6 +335,7 @@ end
 
 -- Global Timer Function
 function GlobalTimer.OnTimer(nID)
+    -- Food Check
     if(nID == 100)then
   		if Bub.Game.Health.Default &lt;= 0 then
 				return Bub.Lost();
@@ -330,6 +352,7 @@ function GlobalTimer.OnTimer(nID)
 	    	end
     	end
 		Bub.Level();
+		-- Play Check
     elseif(nID == 200)then
   		if Bub.Game.Health.Default &lt;= 0 then
 			return Bub.Lost();
@@ -346,6 +369,7 @@ function GlobalTimer.OnTimer(nID)
 	    	end
     	end
 		Bub.Level();
+		-- Clean Check
     elseif(nID == 300)then
   		if Bub.Game.Health.Default &lt;= 0 then
 			return Bub.Lost();
@@ -359,15 +383,22 @@ function GlobalTimer.OnTimer(nID)
 	    		end
 	    	else
 	    		Plugin.SetSize("Clean_Bar", Plugin.GetSize("Clean_Bar").Width-19, Plugin.GetSize("Clean_Bar").Height); 
-	    		if Plugin.GetSize("Clean_Bar").Width &lt; 40 then
-	    			Image.SetVisible("Poop", true);
-	    		else
-	    			Image.SetVisible("Poop", false);
-	    		end	
+				Bub.Poop();
 	    	end
     	end
 		Bub.Level();
     end
+end
+
+
+-- Move Poop to it's own function as of 0.0.0.4
+-- Returns nothing
+function Bub.Poop()
+	if Plugin.GetSize("Clean_Bar").Width &lt; 40 then
+		Image.SetVisible("Poop", true);
+	else
+		Image.SetVisible("Poop", false);
+	end	
 end
 
 -- This function was added in 0.0.0.2
@@ -382,8 +413,8 @@ function Bub.Cost()
 end</Script>
 <BookMarks count="0">
 </BookMarks>
-<DesignCodeLine>294</DesignCodeLine>
-<DesignCodeCol>10</DesignCodeCol>
+<DesignCodeLine>341</DesignCodeLine>
+<DesignCodeCol>3</DesignCodeCol>
 </Globals>
 <Defaults>
 <StartupPage>_PageFirst</StartupPage>
@@ -581,7 +612,7 @@ Enjoy the example.</Desc>
 </MenuBar>
 </ProjectInfo>
 <Page>
-<Name>Page1</Name>
+<Name>Int</Name>
 <InheritObs/>
 <InheritBG/>
 <Description/>
@@ -770,7 +801,7 @@ Enjoy the example.</Desc>
 <Top>23</Top>
 <Bottom>384</Bottom>
 <Left>8</Left>
-<Right>310</Right>
+<Right>307</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -836,7 +867,7 @@ Enjoy the example.</Desc>
 <Options>
 <Text>{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 MS Shell Dlg;}}
 {\colortbl ;\red255\green0\blue0;\red0\green51\blue102;}
-\viewkind4\uc1\pard\cf1\b\f0\fs26 Indio Me v3 - Example\cf0\par
+\viewkind4\uc1\pard\cf1\b\f0\fs26 Indio Me v4 - Example\cf0\par
 \pard\qc\par
 \b0\fs18 This Software is AS IS and is made to show how AMS\line can be useful/fun, this software is based on Bubble Bubble 2\line character only and we don't own any rights to Bubble Bubble\line and is made in Autoplay Media Studios 8.\par
 \par
@@ -857,7 +888,7 @@ This Software is Open Source and free for any Autoplay Media Studio's 8 owner, s
 </Text>
 <TransparentBackground>1</TransparentBackground>
 <BackgroundColor format="hex">ffffff</BackgroundColor>
-<ReadOnly>0</ReadOnly>
+<ReadOnly>1</ReadOnly>
 <AutomaticWordSelection>1</AutomaticWordSelection>
 <VerticalScrollBar>1</VerticalScrollBar>
 <HorizontalScrollBar>0</HorizontalScrollBar>
@@ -882,10 +913,10 @@ This Software is Open Source and free for any Autoplay Media Studio's 8 owner, s
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>392</Top>
-<Bottom>415</Bottom>
-<Left>130</Left>
-<Right>205</Right>
+<Top>391</Top>
+<Bottom>414</Bottom>
+<Left>121</Left>
+<Right>196</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -894,7 +925,7 @@ This Software is Open Source and free for any Autoplay Media Studio's 8 owner, s
 <Event>
 <Name>On Click</Name>
 <Args/>
-<Script>Page.Jump("Page2")</Script>
+<Script>Page.Jump("GameStage")</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
@@ -1004,10 +1035,10 @@ This Software is Open Source and free for any Autoplay Media Studio's 8 owner, s
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>397</Top>
-<Bottom>416</Bottom>
+<Top>393</Top>
+<Bottom>411</Bottom>
 <Left>8</Left>
-<Right>124</Right>
+<Right>114</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -1145,8 +1176,8 @@ end</Script>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>3145774</DesignCodeLine>
-<DesignCodeCol>25714</DesignCodeCol>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1159,7 +1190,7 @@ end</Script>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>5857125</DesignCodeLine>
+<DesignCodeLine>0</DesignCodeLine>
 <DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
@@ -1195,7 +1226,7 @@ end</Script>
 <Actions/>
 <PLUGIN>
 <DLLFile>GroupBox\GroupBox.apo</DLLFile>
-<CustomData>3,0,Indio Me 0.0.0.3,0,2,614865960,,9,0,0,0,0</CustomData>
+<CustomData>3,0,Indio Me 0.0.0.4,0,2,490871824,@Malgun Gothic,9,1,0,0,0</CustomData>
 </PLUGIN>
 <MouseOverSndMode>0</MouseOverSndMode>
 <MouseOverSound/>
@@ -1217,10 +1248,10 @@ end</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>340</Top>
-<Bottom>420</Bottom>
-<Left>240</Left>
-<Right>315</Right>
+<Top>341</Top>
+<Bottom>421</Bottom>
+<Left>241</Left>
+<Right>316</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -1296,11 +1327,109 @@ end</Script>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 </Object>
+<Object>
+<Type>3</Type>
+<Name>Changelog_emoji</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip>Change log</ToolTip>
+<Cursor>1</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>390</Top>
+<Bottom>414</Bottom>
+<Left>210</Left>
+<Right>234</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script>-- This will go to the page called Change logs, 
+-- you can only see this title in AutoPlay Medisa
+-- Studio's IDE
+
+Page.Jump("Change logs");</Script>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>4</DesignCodeLine>
+<DesignCodeCol>25</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\34965_question_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
 <HGuidelines/>
 <VGuidelines/>
 </Page>
 <Page>
-<Name>Page2</Name>
+<Name>GameStage</Name>
 <InheritObs/>
 <InheritBG/>
 <Description/>
@@ -1346,22 +1475,24 @@ Clean = GlobalTimer.Start(300, 20000);</Script>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
+<DesignCodeLine>5</DesignCodeLine>
+<DesignCodeCol>7</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
 <Event>
 <Name>On Close</Name>
 <Args/>
-<Script/>
+<Script>GlobalTimer.Stop(Feed);
+GlobalTimer.Stop(Play);
+GlobalTimer.Stop(Clean);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
+<DesignCodeLine>2</DesignCodeLine>
+<DesignCodeCol>24</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1493,7 +1624,7 @@ Clean = GlobalTimer.Start(300, 20000);</Script>
 <AutoResize>0</AutoResize>
 <Coordinates>
 <Top>11</Top>
-<Bottom>347</Bottom>
+<Bottom>330</Bottom>
 <Left>15</Left>
 <Right>300</Right>
 </Coordinates>
@@ -1560,7 +1691,7 @@ Clean = GlobalTimer.Start(300, 20000);</Script>
 <Actions/>
 <PLUGIN>
 <DLLFile>GroupBox\GroupBox.apo</DLLFile>
-<CustomData>0,3,Indio Me 0.0.0.3,16777215,2,488119312,Showcard Gothic,9,0,0,0,0</CustomData>
+<CustomData>0,3,Indio Me 0.0.0.4,16777215,2,490871848,@Malgun Gothic,9,1,0,0,0</CustomData>
 </PLUGIN>
 <MouseOverSndMode>0</MouseOverSndMode>
 <MouseOverSound/>
@@ -1582,10 +1713,10 @@ Clean = GlobalTimer.Start(300, 20000);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>369</Top>
-<Bottom>392</Bottom>
-<Left>16</Left>
-<Right>91</Right>
+<Top>345</Top>
+<Bottom>368</Bottom>
+<Left>15</Left>
+<Right>90</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -1708,10 +1839,10 @@ Image.SetVisible("Food", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>352</Top>
-<Bottom>375</Bottom>
-<Left>120</Left>
-<Right>195</Right>
+<Top>344</Top>
+<Bottom>367</Bottom>
+<Left>121</Left>
+<Right>196</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -1834,10 +1965,10 @@ Image.SetVisible("Play", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>369</Top>
-<Bottom>392</Bottom>
-<Left>225</Left>
-<Right>300</Right>
+<Top>343</Top>
+<Bottom>366</Bottom>
+<Left>227</Left>
+<Right>302</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -2149,8 +2280,8 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>287</Top>
-<Bottom>347</Bottom>
+<Top>270</Top>
+<Bottom>330</Bottom>
 <Left>240</Left>
 <Right>300</Right>
 </Coordinates>
@@ -2243,10 +2374,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>326</Top>
-<Bottom>347</Bottom>
-<Left>19</Left>
-<Right>40</Right>
+<Top>312</Top>
+<Bottom>333</Bottom>
+<Left>18</Left>
+<Right>39</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -2333,21 +2464,21 @@ Image.SetVisible("Shower", false);</Script>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 <OriginalRect>
-<Top>326</Top>
-<Bottom>347</Bottom>
-<Left>19</Left>
-<Right>40</Right>
+<Top>312</Top>
+<Bottom>333</Bottom>
+<Left>18</Left>
+<Right>39</Right>
 </OriginalRect>
 </Text>
 </Object>
 <Object>
 <Type>3</Type>
-<Name>Image3</Name>
+<Name>AMS_Open</Name>
 <VisibleAtDesignTime>1</VisibleAtDesignTime>
 <VisibleAtRunTime>1</VisibleAtRunTime>
 <Locked>0</Locked>
 <Enabled>1</Enabled>
-<ToolTip>Click here to be taken to the Autoplay Media Studios Product Page</ToolTip>
+<ToolTip>Click here to be taken to the AutoPlay Media Studios 8 Product Page</ToolTip>
 <Cursor>1</Cursor>
 <Group>0</Group>
 <MaintainAspectRatio>1</MaintainAspectRatio>
@@ -2357,8 +2488,8 @@ Image.SetVisible("Shower", false);</Script>
 <Coordinates>
 <Top>393</Top>
 <Bottom>413</Bottom>
-<Left>118</Left>
-<Right>197</Right>
+<Left>225</Left>
+<Right>304</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -2373,7 +2504,7 @@ Image.SetVisible("Shower", false);</Script>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>1802398766</DesignCodeLine>
+<DesignCodeLine>0</DesignCodeLine>
 <DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
@@ -2402,7 +2533,7 @@ Image.SetVisible("Shower", false);</Script>
 <TreeState>0</TreeState>
 </TreeStates>
 <DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>10</DesignCodeCol>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -2416,7 +2547,7 @@ Image.SetVisible("Shower", false);</Script>
 <TreeState>0</TreeState>
 </TreeStates>
 <DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>10</DesignCodeCol>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -2461,10 +2592,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>312</Top>
-<Bottom>333</Bottom>
-<Left>18</Left>
-<Right>50</Right>
+<Top>298</Top>
+<Bottom>319</Bottom>
+<Left>17</Left>
+<Right>49</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -2551,10 +2682,10 @@ Image.SetVisible("Shower", false);</Script>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 <OriginalRect>
-<Top>312</Top>
-<Bottom>333</Bottom>
-<Left>18</Left>
-<Right>50</Right>
+<Top>298</Top>
+<Bottom>319</Bottom>
+<Left>17</Left>
+<Right>49</Right>
 </OriginalRect>
 </Text>
 </Object>
@@ -2573,10 +2704,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>313</Top>
-<Bottom>334</Bottom>
-<Left>50</Left>
-<Right>126</Right>
+<Top>299</Top>
+<Bottom>320</Bottom>
+<Left>49</Left>
+<Right>125</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -2663,10 +2794,10 @@ Image.SetVisible("Shower", false);</Script>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 <OriginalRect>
-<Top>313</Top>
-<Bottom>334</Bottom>
-<Left>50</Left>
-<Right>126</Right>
+<Top>299</Top>
+<Bottom>320</Bottom>
+<Left>49</Left>
+<Right>125</Right>
 </OriginalRect>
 </Text>
 </Object>
@@ -2685,10 +2816,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>327</Top>
-<Bottom>348</Bottom>
-<Left>50</Left>
-<Right>126</Right>
+<Top>313</Top>
+<Bottom>334</Bottom>
+<Left>49</Left>
+<Right>125</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -2775,10 +2906,10 @@ Image.SetVisible("Shower", false);</Script>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 <OriginalRect>
-<Top>327</Top>
-<Bottom>348</Bottom>
-<Left>50</Left>
-<Right>126</Right>
+<Top>313</Top>
+<Bottom>334</Bottom>
+<Left>49</Left>
+<Right>125</Right>
 </OriginalRect>
 </Text>
 </Object>
@@ -2797,10 +2928,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>392</Top>
-<Bottom>405</Bottom>
-<Left>16</Left>
-<Right>92</Right>
+<Top>368</Top>
+<Bottom>381</Bottom>
+<Left>15</Left>
+<Right>91</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -2873,10 +3004,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>375</Top>
-<Bottom>388</Bottom>
-<Left>120</Left>
-<Right>196</Right>
+<Top>368</Top>
+<Bottom>381</Bottom>
+<Left>121</Left>
+<Right>197</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -2949,10 +3080,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>392</Top>
-<Bottom>405</Bottom>
-<Left>225</Left>
-<Right>301</Right>
+<Top>368</Top>
+<Bottom>381</Bottom>
+<Left>227</Left>
+<Right>303</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -3025,10 +3156,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>298</Top>
-<Bottom>319</Bottom>
-<Left>18</Left>
-<Right>44</Right>
+<Top>284</Top>
+<Bottom>305</Bottom>
+<Left>17</Left>
+<Right>43</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -3115,10 +3246,10 @@ Image.SetVisible("Shower", false);</Script>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 <OriginalRect>
-<Top>298</Top>
-<Bottom>319</Bottom>
-<Left>18</Left>
-<Right>44</Right>
+<Top>284</Top>
+<Bottom>305</Bottom>
+<Left>17</Left>
+<Right>43</Right>
 </OriginalRect>
 </Text>
 </Object>
@@ -3137,10 +3268,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>298</Top>
-<Bottom>319</Bottom>
-<Left>50</Left>
-<Right>126</Right>
+<Top>284</Top>
+<Bottom>305</Bottom>
+<Left>49</Left>
+<Right>125</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -3227,10 +3358,10 @@ Image.SetVisible("Shower", false);</Script>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 <OriginalRect>
-<Top>298</Top>
-<Bottom>319</Bottom>
-<Left>50</Left>
-<Right>126</Right>
+<Top>284</Top>
+<Bottom>305</Bottom>
+<Left>49</Left>
+<Right>125</Right>
 </OriginalRect>
 </Text>
 </Object>
@@ -3473,10 +3604,10 @@ Image.SetVisible("Shower", false);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>356</Top>
-<Bottom>386</Bottom>
-<Left>91</Left>
-<Right>121</Right>
+<Top>387</Top>
+<Bottom>417</Bottom>
+<Left>7</Left>
+<Right>37</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -3487,14 +3618,16 @@ Image.SetVisible("Shower", false);</Script>
 <Args/>
 <Script>Image.SetVisible(this, false);
 Audio.ToggleMute(CHANNEL_USER1);
-Image.SetVisible("SetMute");</Script>
+Image.SetVisible("SetMute");
+
+Window.SetText(Application.GetWndHandle(), "Indio Me (Bub)");</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>2</DesignCodeLine>
-<DesignCodeCol>21</DesignCodeCol>
+<DesignCodeLine>4</DesignCodeLine>
+<DesignCodeCol>58</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -3569,10 +3702,10 @@ Image.SetVisible("SetMute");</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>356</Top>
-<Bottom>386</Bottom>
-<Left>91</Left>
-<Right>121</Right>
+<Top>387</Top>
+<Bottom>417</Bottom>
+<Left>7</Left>
+<Right>37</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -3583,13 +3716,15 @@ Image.SetVisible("SetMute");</Script>
 <Args/>
 <Script>Image.SetVisible(this, false);
 Audio.ToggleMute(CHANNEL_USER1);
-Image.SetVisible("SetUnMute");</Script>
+Image.SetVisible("SetUnMute");
+
+Window.SetText(Application.GetWndHandle(), "Indio Me (Bub) - Muted");</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeLine>4</DesignCodeLine>
 <DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
@@ -4026,13 +4161,804 @@ Image.SetVisible("SetUnMute");</Script>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 </Object>
+<Object>
+<Type>3</Type>
+<Name>Changelog_emoji</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip>Change log</ToolTip>
+<Cursor>1</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>391</Top>
+<Bottom>415</Bottom>
+<Left>193</Left>
+<Right>217</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script>-- This will go to the page called Change logs, 
+-- you can only see this title in AutoPlay Medisa
+-- Studio's IDE
+
+Page.Jump("Change logs");</Script>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>4</DesignCodeLine>
+<DesignCodeCol>25</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions>
+<Action>
+<Type>0</Type>
+<Name>None</Name>
+<Exit>0</Exit>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+</Action>
+</Actions>
+<NormalImage>
+<Filename>AutoPlay\Images\34965_question_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
 <HGuidelines/>
-<VGuidelines>
-<Guideline>
-<pt>420</pt>
-<locked>0</locked>
-</Guideline>
-</VGuidelines>
+<VGuidelines/>
+</Page>
+<Page>
+<Name>Change logs</Name>
+<InheritObs/>
+<InheritBG/>
+<Description/>
+<Keywords/>
+<Background>
+<Type>2</Type>
+<ImageStyle>0</ImageStyle>
+<TopColor>16711680</TopColor>
+<BottomColor>16777215</BottomColor>
+<UseCustomBackgroundSettings>0</UseCustomBackgroundSettings>
+<TransitionEffect/>
+<TransProps/>
+<NormalImage>
+<Filename>AutoPlay\Images\body.png</Filename>
+</NormalImage>
+</Background>
+<Event>
+<Name>On Preload</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Show</Name>
+<Args/>
+<Script>Change = {
+	"Use the drop down above to select a version you want to view, this will enable you to read though the change logs\r\n\r\nOn Show has the table with all the change log information.",
+	"0.0.0.1 was created by myself Kingzooly as just a little demo to show it could be done at the time in PE, once I created it I wanted to make it a example or tutoral.",
+	"0.0.0.2 was a rebuild as I lost the origirnal source code.",
+	"0.0.0.3 was a update to start to include the tutorial/example elements.\r\n\r\n . Tables.\r\n . Pages.\r\n . Audio.\r\n . CheckBox's.\r\n . Functions.\r\n . Images.\r\n . Buttons.\r\n . Plugins.\r\n . Quick Actions.\r\n . RichText.\r\n . Dialog Message.\r\n . Labels.\r\n\r\nAnd other basic AMS actions and functions.",
+	"0.0.0.4 was a update to add a few more things.\r\n\r\n . ComboBox.\r\n . Paragraph.\r\n . Window(Set Text).\r\n\r\nAdded the Change Log page and updated the mute option."
+}</Script>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>4</DesignCodeLine>
+<DesignCodeCol>262</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Close</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Timer</Name>
+<Args>number e_ID</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Audio</Name>
+<Args>number e_Channel, string e_State</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Size</Name>
+<Args>number e_WindowWidth, number e_WindowHeight, number e_PageWidth, number e_PageHeight, number e_Type</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Menu</Name>
+<Args>number e_ID, table e_ItemInfo</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Key</Name>
+<Args>number e_Key, table e_Modifiers</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Mouse Button</Name>
+<Args>number e_Type, number e_X, number e_Y</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Mouse Move</Name>
+<Args>number e_X, number e_Y</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Mouse Wheel</Name>
+<Args>table e_Flags, number e_Delta, number e_X, number e_Y</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Object>
+<Type>40</Type>
+<Name>Plugin1</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>0</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>11</Top>
+<Bottom>415</Bottom>
+<Left>6</Left>
+<Right>306</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On RightClick</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<PLUGIN>
+<DLLFile>GroupBox\GroupBox.apo</DLLFile>
+<CustomData>3,0,Indio Me 0.0.0.4,0,2,490871824,@Malgun Gothic,9,1,0,0,0</CustomData>
+</PLUGIN>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
+<Object>
+<Type>3</Type>
+<Name>Image1</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>0</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>340</Top>
+<Bottom>420</Bottom>
+<Left>240</Left>
+<Right>315</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>1634689536</DesignCodeLine>
+<DesignCodeCol>1073767538</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>258770936</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>25714</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\default_header_avata.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
+<Object>
+<Type>3</Type>
+<Name>Image2</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip>Return to last Page you was at.</ToolTip>
+<Cursor>1</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>32</Top>
+<Bottom>64</Bottom>
+<Left>17</Left>
+<Right>49</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script>ComboBox.SetSelected("ComboBox1", 1);
+Page.Navigate(PAGE_BACKWARD);</Script>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>37</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\28329_back_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
+<Object>
+<Type>10</Type>
+<Name>ComboBox1</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>0</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>37</Top>
+<Bottom>60</Bottom>
+<Left>92</Left>
+<Right>292</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Select</Name>
+<Args>number e_Selection</Args>
+<Script>
+GetID = ComboBox.GetSelected("ComboBox1");
+Paragraph.SetText("changelog", Change[GetID]);
+</Script>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Key</Name>
+<Args>number e_Key, table e_Modifiers</Args>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Focus</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<Options>
+<Sort>0</Sort>
+<ComboType>0</ComboType>
+<LinesToDisplay>4</LinesToDisplay>
+<TextColor format="hex">000000</TextColor>
+<BackgroundColor format="hex">ffffff</BackgroundColor>
+<ReadOrder>0</ReadOrder>
+</Options>
+<Font>
+<FontData>
+<FontName>Segoe UI</FontName>
+<CharacterSet>0</CharacterSet>
+<Height>-12</Height>
+<Weight>400</Weight>
+<Italic>0</Italic>
+<Underline>0</Underline>
+<StrikeOut>0</StrikeOut>
+<AntiAlias>1</AntiAlias>
+</FontData>
+</Font>
+<ComboItems>
+<ComboItem>
+<Text>Select version here</Text>
+<Data/>
+</ComboItem>
+<ComboItem>
+<Text>0.0.0.1</Text>
+<Data>1</Data>
+</ComboItem>
+<ComboItem>
+<Text>0.0.0.2</Text>
+<Data>2</Data>
+</ComboItem>
+<ComboItem>
+<Text>0.0.0.3</Text>
+<Data>3</Data>
+</ComboItem>
+<ComboItem>
+<Text>0.0.0.4</Text>
+<Data>4</Data>
+</ComboItem>
+</ComboItems>
+</Object>
+<Object>
+<Type>2</Type>
+<Name>changelog</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>0</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>0</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>76</Top>
+<Bottom>406</Bottom>
+<Left>15</Left>
+<Right>302</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<Text>
+<Body>Use the drop down above to select a version you want to view, this will enable you to read though the change logs 
+
+On Show has the table with all the change log information</Body>
+<NormalColor>0</NormalColor>
+<HighlightColor>0</HighlightColor>
+<MouseDownColor>0</MouseDownColor>
+<DisabledColor>3355443</DisabledColor>
+<BorderColor>0</BorderColor>
+<BackColor>16777215</BackColor>
+<FontData>
+<FontName>Segoe UI</FontName>
+<CharacterSet>0</CharacterSet>
+<Height>-12</Height>
+<Weight>400</Weight>
+<Italic>0</Italic>
+<Underline>0</Underline>
+<StrikeOut>0</StrikeOut>
+<AntiAlias>1</AntiAlias>
+</FontData>
+<Alignment>0</Alignment>
+<TransBG>1</TransBG>
+<VSMode>0</VSMode>
+<HSMode>2</HSMode>
+<SBStyle>1</SBStyle>
+<SBSkin>Windows7</SBSkin>
+<Border>0</Border>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Text>
+</Object>
+<HGuidelines/>
+<VGuidelines/>
 </Page>
 <SugDialogs/>
 <MissingTechs>

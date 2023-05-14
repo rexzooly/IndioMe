@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?><DocumentData>
-<ProductVersion>8.2.0.0</ProductVersion>
+<ProductVersion>8.5.3.0</ProductVersion>
 <ProductID>{ABF9EF9E-ECF6-4019-8A3E-908A6CFF4D1A}</ProductID>
 <IRProductName>AutoPlay Media Studio 8</IRProductName>
 <ProductType>Commercial</ProductType>
@@ -7,8 +7,8 @@
 <Title>Indio Me(Bub)</Title>
 <Author>Rexzooly Kai Black</Author>
 <Company/>
-<Copyright>Copyright © 2013</Copyright>
-<URL>kurobox.co.uk</URL>
+<Copyright>Copyright Â© 2023</Copyright>
+<URL>rexzooly.co.uk</URL>
 <Email/>
 <Comments>This example is for you to learn how to create a simple cyber pet like game.
 
@@ -18,7 +18,7 @@ Please read the manual/help file if your stuck before you go crazy asking people
 
 Enjoy the example.</Comments>
 <CreatedVersion>8.1.0.0 (Professional Edition)</CreatedVersion>
-<LastSavedVersion>8.2.0.0 (Professional Edition Commercial)</LastSavedVersion>
+<LastSavedVersion>8.3.0.0 (Professional Edition Commercial)</LastSavedVersion>
 </DocInfo>
 <ProjectInfo ToolTipStyle="0">
 <Office2007Theme Theme="5"/>
@@ -71,24 +71,28 @@ Enjoy the example.</Comments>
 <Globals>
 <Script>Bub = {
 	-- Example Version
-	Version = '0.0.0.2',
+	Version = '0.0.0.3',
 	-- Game Defaults
 	Game = {
 		Gold = {
 			Handle = 'Goldtxt', 
-			Default = 3000
+			Default = 3000,
+			Boost = 25
 		}, 
 		XP = {
 			Handle = 'XPtxt', 
-			Default = 0
+			Default = 0,
+			Boost = 0
 		},
 		Health = {
 			Handle = 'Lifetxt', 
-			Default = 1000
+			Default = 1000,
+			Boost = 0
 		},	
 		Active = {
 			IsActive = true, 
-			Win = false
+			Win = false,
+			Boost = true
 		}
 	}
 };
@@ -193,7 +197,7 @@ function Bub.Clean()
 				if not Bub.Cost() then
 					return Bub.Lost()
 				end
-				Plugin.SetSize("Clean_Bar", "76", Plugin.GetSize("Clean_Bar").Height);  
+				Plugin.SetSize("Clean_Bar", "76", Plugin.GetSize("Clean_Bar").Height); 
 				Bub.Update(Bub.Game.Gold.Handle, Bub.Game.Gold.Default);
 				Bub.Update(Bub.Game.XP.Handle, Bub.Game.XP.Default);
 				Bub.Update(Bub.Game.Health.Handle, Bub.Game.Health.Default);
@@ -212,9 +216,68 @@ function Bub.Update(sObject, sText)
 	Label.SetText(sObject, tostring(sText));
 end
 
+function Bub.UpdateStats(sStat, nStat, nOption)
+		
+	-- Update the XP Stat	
+	if sStat == Bub.Game.XP.Handle then
+		-- Check what option we need to use Add or Takeaway
+		if type(nOption) == "nil" or nOption == 0 then
+			Bub.Game.XP.Default = Bub.Game.XP.Default + nStat;
+		else	
+			Bub.Game.XP.Default = Bub.Game.XP.Default - nStat;
+		end
+		-- Update Label with the new change.
+		Bub.Update(sStat, Bub.Game.XP.Default);
+	end
+	
+	-- Update the Gold Stat
+	if sStat == Bub.Game.Gold.Handle then
+		-- Check what option we need to use Add or Takeaway
+		if type(nOption) == "nil" or nOption == 0 then
+			Bub.Game.Gold.Default = Bub.Game.Gold.Default + nStat;
+		else	
+			Bub.Game.Gold.Default = Bub.Game.Gold.Default - nStat;
+		end
+		-- Update Label with the new change.
+		Bub.Update(sStat, Bub.Game.Gold.Default);
+	end
+	
+	-- Update the Health Stat
+	if sStat == Bub.Game.Health.Handle then
+		-- Check what option we need to use Add or Takeaway
+		if type(nOption) == "nil" or nOption == 0 then
+			Bub.Game.Health.Default = Bub.Game.Health.Default + nStat;
+		else	
+			Bub.Game.Health.Default = Bub.Game.Health.Default - nStat;
+		end
+		-- Update Label with the new change.
+		Bub.Update(sStat, Bub.Game.Health.Default);
+	end
+
+end
+
+
 -- This function checks if you have got to the end
 -- if you hit the end the game ends.
 function Bub.Level()
+	if Bub.Game.XP.Default &gt; 500 and Bub.Game.XP.Default &lt; 510 then
+		if Bub.Game.Active.Boost then
+	 		Bub.UpdateStats(Bub.Game.Gold.Handle, Bub.Game.Gold.Boost, 0);
+	 		Bub.UpdateStats(Bub.Game.XP.Handle, 11, 0);
+	 	end
+	end
+	if Bub.Game.XP.Default &gt; 1000 and Bub.Game.XP.Default &lt; 1010 then
+		if Bub.Game.Active.Boost then
+	 		Bub.UpdateStats(Bub.Game.Gold.Handle, Bub.Game.Gold.Boost, 0);
+	 		Bub.UpdateStats(Bub.Game.XP.Handle, 11, 0);
+	 	end
+	end
+	if Bub.Game.XP.Default &gt; 1500 and Bub.Game.XP.Default &lt; 1510 then
+		if Bub.Game.Active.Boost then
+	 		Bub.UpdateStats(Bub.Game.Gold.Handle, Bub.Game.Gold.Boost, 0);
+	 		Bub.UpdateStats(Bub.Game.XP.Handle, 11, 0);
+	 	end
+	end
 	if Bub.Game.XP.Default &gt;= 2000 then
 		Bub.Game.Active = {IsActive = false, Win = true};
     	GlobalTimer.Stop(Food);
@@ -223,7 +286,7 @@ function Bub.Level()
 		Bub.Update(Bub.Game.Gold.Handle, 'Won');
 		Bub.Update(Bub.Game.XP.Handle, 'Won');
 		Bub.Update(Bub.Game.Health.Handle, 'Won');
-		Label.SetVisible("Won", true);
+		Label.SetVisible("You win", true);
 		xButton.SetEnabled("xButton1", false);
 		xButton.SetEnabled("xButton2", false);
 		xButton.SetEnabled("xButton3", false);
@@ -295,7 +358,12 @@ function GlobalTimer.OnTimer(nID)
 	    			Label.SetText(Bub.Game.Health.Handle, Bub.Game.Health.Default);
 	    		end
 	    	else
-	    		Plugin.SetSize("Clean_Bar", Plugin.GetSize("Clean_Bar").Width-19, Plugin.GetSize("Clean_Bar").Height);    	
+	    		Plugin.SetSize("Clean_Bar", Plugin.GetSize("Clean_Bar").Width-19, Plugin.GetSize("Clean_Bar").Height); 
+	    		if Plugin.GetSize("Clean_Bar").Width &lt; 40 then
+	    			Image.SetVisible("Poop", true);
+	    		else
+	    			Image.SetVisible("Poop", false);
+	    		end	
 	    	end
     	end
 		Bub.Level();
@@ -314,8 +382,8 @@ function Bub.Cost()
 end</Script>
 <BookMarks count="0">
 </BookMarks>
-<DesignCodeLine>1</DesignCodeLine>
-<DesignCodeCol>19</DesignCodeCol>
+<DesignCodeLine>294</DesignCodeLine>
+<DesignCodeCol>10</DesignCodeCol>
 </Globals>
 <Defaults>
 <StartupPage>_PageFirst</StartupPage>
@@ -339,7 +407,7 @@ end</Script>
 <Author/>
 <Contact/>
 <Web/>
-<Copyright>Copyright © 2012</Copyright>
+<Copyright>Copyright Â© 2012</Copyright>
 <Desc>This example is for you to learn how to create a simple cyber pet like game.
 
 If you use this example without changing much please credit all parties.
@@ -367,7 +435,7 @@ Enjoy the example.</Desc>
 <RuntimeSkin>
 <UseSkinFile>1</UseSkinFile>
 <SkinFilename>AutoPlay\Plugins\Office2007.cjstyles</SkinFilename>
-<SkinSubStyle>LightBlue</SkinSubStyle>
+<SkinSubStyle>NormalBlack</SkinSubStyle>
 </RuntimeSkin>
 <Databases>
 <MySQL>0</MySQL>
@@ -439,17 +507,17 @@ Enjoy the example.</Desc>
 <FileVer1>0</FileVer1>
 <FileVer2>0</FileVer2>
 <FileVer3>0</FileVer3>
-<FileVer4>1</FileVer4>
+<FileVer4>3</FileVer4>
 <ProductVer1>0</ProductVer1>
 <ProductVer2>0</ProductVer2>
 <ProductVer3>0</ProductVer3>
-<ProductVer4>1</ProductVer4>
+<ProductVer4>3</ProductVer4>
 <Comments>Created with AutoPlay Media Studio</Comments>
 <Company>Powered by AutoPlay Media Studio</Company>
 <FileDescription>www.indigorose.com</FileDescription>
-<LegalCopyright>Runtime Engine Copyright © 2012 Indigo Rose Corporation (www.indigorose.com)</LegalCopyright>
+<LegalCopyright>Runtime Engine Copyright Â© 2012 Indigo Rose Corporation (www.indigorose.com)</LegalCopyright>
 <LegalTrademarks>AutoPlay Media Studio is a Trademark of Indigo Rose Corporation</LegalTrademarks>
-<PrivateBuild>Tut build by Gremlin of IR (Rexzooly)</PrivateBuild>
+<PrivateBuild>Example build by Kingzooly of IR (Rexzooly)</PrivateBuild>
 <ProductName>Indio Me (Bub)</ProductName>
 <SpecialBuild/>
 </EXEResourceInfo>
@@ -699,10 +767,10 @@ Enjoy the example.</Desc>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>5</Top>
-<Bottom>371</Bottom>
-<Left>5</Left>
-<Right>311</Right>
+<Top>23</Top>
+<Bottom>384</Bottom>
+<Left>8</Left>
+<Right>310</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -768,18 +836,16 @@ Enjoy the example.</Desc>
 <Options>
 <Text>{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 MS Shell Dlg;}}
 {\colortbl ;\red255\green0\blue0;\red0\green51\blue102;}
-\viewkind4\uc1\pard\cf1\b\f0\fs26 Indio Me V2 - Example\cf0\par
+\viewkind4\uc1\pard\cf1\b\f0\fs26 Indio Me v3 - Example\cf0\par
 \pard\qc\par
-\b0\fs18 This Software is AS IS and is made to show how AMS\line can be useful/fun, this software is based on Bubble Bubble 2\line and is made in Autoplay Media Studios 8.\par
+\b0\fs18 This Software is AS IS and is made to show how AMS\line can be useful/fun, this software is based on Bubble Bubble 2\line character only and we don't own any rights to Bubble Bubble\line and is made in Autoplay Media Studios 8.\par
 \par
 When editing/adding to this example remeber to read the \par
 help file, this example will show you how to make simple \line cyber pet.\par
 \cf1\par
 \pard\b Thanks by:\line\cf0\par
 \pard\qc\cf2 Reteset\cf0\b0 , Global Timer Plugin.\par
-\par
 \cf2\b RizlaUK\cf0 ,\b0  GroupBox was also by this great man with Proxy Dll by Reteset.\par
-\par
 \cf2\b IndigoRose\cf0\b0 , Autoplay Media Studio's 8 Software/Runtime.\par
 \par
 This Software is Open Source and free for any Autoplay Media Studio's 8 owner, so enjoy.\par
@@ -816,10 +882,10 @@ This Software is Open Source and free for any Autoplay Media Studio's 8 owner, s
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>382</Top>
-<Bottom>405</Bottom>
-<Left>120</Left>
-<Right>195</Right>
+<Top>392</Top>
+<Bottom>415</Bottom>
+<Left>130</Left>
+<Right>205</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -897,7 +963,7 @@ This Software is Open Source and free for any Autoplay Media Studio's 8 owner, s
 </Event>
 <Actions/>
 <Options>
-<Text>Test</Text>
+<Text>Play</Text>
 <TextColor format="hex">333399</TextColor>
 <EnableMarkup>0</EnableMarkup>
 <ButtonImage/>
@@ -922,6 +988,219 @@ This Software is Open Source and free for any Autoplay Media Studio's 8 owner, s
 <StrikeOut>0</StrikeOut>
 <AntiAlias>1</AntiAlias>
 </FontData>
+</Object>
+<Object>
+<Type>15</Type>
+<Name>CheckBox1</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>0</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>397</Top>
+<Bottom>416</Bottom>
+<Left>8</Left>
+<Right>124</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script>if CheckBox.GetChecked("CheckBox1") then
+
+	DisableBonus = Dialog.Message("Disable", "This will disable the 25 Gold bonus at ever 500 XP do you want to disable this?", MB_YESNO, MB_ICONNONE, MB_DEFBUTTON2);
+	
+	if DisableBonus == IDYES then
+		Bub.Game.Active.Boost = false;
+		CheckBox.SetChecked("CheckBox1", true);
+	else
+		CheckBox.SetChecked("CheckBox1", false);
+	end
+	
+else
+	Bub.Game.Active.Boost = true;
+	CheckBox.SetChecked("CheckBox1", false);
+end</Script>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>8</DesignCodeLine>
+<DesignCodeCol>40</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<Options>
+<Text>Disable Bonus</Text>
+<NormalColor format="hex">000000</NormalColor>
+<HighlightColor format="hex">000000</HighlightColor>
+<MouseDownColor format="hex">000000</MouseDownColor>
+<Disabled format="hex">c0c0c0</Disabled>
+<Alignment>0</Alignment>
+<ButtonAlign>0</ButtonAlign>
+<RTLReadingOrder>0</RTLReadingOrder>
+<Checked>0</Checked>
+<MouseOverSoundMode>0</MouseOverSoundMode>
+<MouseOverSound/>
+<MouseClickSoundMode>0</MouseClickSoundMode>
+<MouseClickSound/>
+</Options>
+<Font>
+<FontData>
+<FontName>Segoe UI</FontName>
+<CharacterSet>0</CharacterSet>
+<Height>-12</Height>
+<Weight>400</Weight>
+<Italic>0</Italic>
+<Underline>0</Underline>
+<StrikeOut>0</StrikeOut>
+<AntiAlias>1</AntiAlias>
+</FontData>
+</Font>
+</Object>
+<Object>
+<Type>40</Type>
+<Name>Plugin1</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>0</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>11</Top>
+<Bottom>386</Bottom>
+<Left>6</Left>
+<Right>306</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>3145774</DesignCodeLine>
+<DesignCodeCol>25714</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On RightClick</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>5857125</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<PLUGIN>
+<DLLFile>GroupBox\GroupBox.apo</DLLFile>
+<CustomData>3,0,Indio Me 0.0.0.3,0,2,614865960,,9,0,0,0,0</CustomData>
+</PLUGIN>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
 </Object>
 <Object>
 <Type>3</Type>
@@ -1281,7 +1560,7 @@ Clean = GlobalTimer.Start(300, 20000);</Script>
 <Actions/>
 <PLUGIN>
 <DLLFile>GroupBox\GroupBox.apo</DLLFile>
-<CustomData>0,3,Indio Me 0.0.0.2,16777215,2,242490368,Showcard Gothic,9,0,0,0,0</CustomData>
+<CustomData>0,3,Indio Me 0.0.0.3,16777215,2,488119312,Showcard Gothic,9,0,0,0,0</CustomData>
 </PLUGIN>
 <MouseOverSndMode>0</MouseOverSndMode>
 <MouseOverSound/>
@@ -1303,8 +1582,8 @@ Clean = GlobalTimer.Start(300, 20000);</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>370</Top>
-<Bottom>393</Bottom>
+<Top>369</Top>
+<Bottom>392</Bottom>
 <Left>16</Left>
 <Right>91</Right>
 </Coordinates>
@@ -1315,14 +1594,15 @@ Clean = GlobalTimer.Start(300, 20000);</Script>
 <Event>
 <Name>On Click</Name>
 <Args/>
-<Script>Bub.Feed();</Script>
+<Script>Bub.Feed();
+Image.SetVisible("Food", false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>11</DesignCodeCol>
+<DesignCodeLine>1</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1344,6 +1624,7 @@ Clean = GlobalTimer.Start(300, 20000);</Script>
 <Name>On Enter</Name>
 <Args/>
 <Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\food.png");
+Image.SetVisible("Food", true);
 Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Extend.wav", true, false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
@@ -1351,21 +1632,22 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Extend.wav", true, false);</Scrip
 <TreeState>0</TreeState>
 </TreeStates>
 <DesignCodeLine>1</DesignCodeLine>
-<DesignCodeCol>6</DesignCodeCol>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
 <Event>
 <Name>On Leave</Name>
 <Args/>
-<Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\default.png");</Script>
+<Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\default.png");
+Image.SetVisible("Food", false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>58</DesignCodeCol>
+<DesignCodeLine>1</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1438,14 +1720,15 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Extend.wav", true, false);</Scrip
 <Event>
 <Name>On Click</Name>
 <Args/>
-<Script>Bub.Play();</Script>
+<Script>Bub.Play();
+Image.SetVisible("Play", false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>11</DesignCodeCol>
+<DesignCodeLine>1</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1467,6 +1750,7 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Extend.wav", true, false);</Scrip
 <Name>On Enter</Name>
 <Args/>
 <Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\Play.png");
+Image.SetVisible("Play", true);
 Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Option.wav", true, false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
@@ -1474,21 +1758,22 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Option.wav", true, false);</Scrip
 <TreeState>0</TreeState>
 </TreeStates>
 <DesignCodeLine>1</DesignCodeLine>
-<DesignCodeCol>10</DesignCodeCol>
+<DesignCodeCol>29</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
 <Event>
 <Name>On Leave</Name>
 <Args/>
-<Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\default.png");</Script>
+<Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\default.png");
+Image.SetVisible("Play", false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>58</DesignCodeCol>
+<DesignCodeLine>1</DesignCodeLine>
+<DesignCodeCol>32</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1549,8 +1834,8 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Option.wav", true, false);</Scrip
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>370</Top>
-<Bottom>393</Bottom>
+<Top>369</Top>
+<Bottom>392</Bottom>
 <Left>225</Left>
 <Right>300</Right>
 </Coordinates>
@@ -1561,14 +1846,16 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Option.wav", true, false);</Scrip
 <Event>
 <Name>On Click</Name>
 <Args/>
-<Script>Bub.Clean();</Script>
+<Script>Bub.Clean();
+Image.SetVisible("Poop", false);
+Image.SetVisible("Shower", false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>12</DesignCodeCol>
+<DesignCodeLine>2</DesignCodeLine>
+<DesignCodeCol>32</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1590,6 +1877,7 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Option.wav", true, false);</Scrip
 <Name>On Enter</Name>
 <Args/>
 <Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\Clean.png");
+Image.SetVisible("Shower", true);
 Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Cursor2.wav", true, false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
@@ -1597,21 +1885,22 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Cursor2.wav", true, false);</Scri
 <TreeState>0</TreeState>
 </TreeStates>
 <DesignCodeLine>1</DesignCodeLine>
-<DesignCodeCol>10</DesignCodeCol>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
 <Event>
 <Name>On Leave</Name>
 <Args/>
-<Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\default.png");</Script>
+<Script>Image.Load("Bubble_Pet", "AutoPlay\\Images\\default.png");
+Image.SetVisible("Shower", false);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>58</DesignCodeCol>
+<DesignCodeLine>1</DesignCodeLine>
+<DesignCodeCol>32</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -2508,8 +2797,8 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Cursor2.wav", true, false);</Scri
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>393</Top>
-<Bottom>406</Bottom>
+<Top>392</Top>
+<Bottom>405</Bottom>
 <Left>16</Left>
 <Right>92</Right>
 </Coordinates>
@@ -2660,8 +2949,8 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Cursor2.wav", true, false);</Scri
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>393</Top>
-<Bottom>406</Bottom>
+<Top>392</Top>
+<Bottom>405</Bottom>
 <Left>225</Left>
 <Right>301</Right>
 </Coordinates>
@@ -3169,6 +3458,574 @@ Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Cursor2.wav", true, false);</Scri
 </OriginalRect>
 </Text>
 </Object>
+<Object>
+<Type>3</Type>
+<Name>SetUnMute</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>0</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip>Unmute</ToolTip>
+<Cursor>1</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>356</Top>
+<Bottom>386</Bottom>
+<Left>91</Left>
+<Right>121</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script>Image.SetVisible(this, false);
+Audio.ToggleMute(CHANNEL_USER1);
+Image.SetVisible("SetMute");</Script>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>2</DesignCodeLine>
+<DesignCodeCol>21</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\65773_mute_volume_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
+<Object>
+<Type>3</Type>
+<Name>SetMute</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip>Mute</ToolTip>
+<Cursor>1</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>356</Top>
+<Bottom>386</Bottom>
+<Left>91</Left>
+<Right>121</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script>Image.SetVisible(this, false);
+Audio.ToggleMute(CHANNEL_USER1);
+Image.SetVisible("SetUnMute");</Script>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\65774_up_volume_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
+<Object>
+<Type>3</Type>
+<Name>Food</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>0</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>0</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>152</Top>
+<Bottom>200</Bottom>
+<Left>90</Left>
+<Right>138</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>26478</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>3407925</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>4079394</DesignCodeLine>
+<DesignCodeCol>2573</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\4569254_carrot_salad_vegetables_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
+<Object>
+<Type>3</Type>
+<Name>Play</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>0</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>0</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>91</Top>
+<Bottom>155</Bottom>
+<Left>65</Left>
+<Right>129</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>26478</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>4079394</DesignCodeLine>
+<DesignCodeCol>7495936</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>4079394</DesignCodeLine>
+<DesignCodeCol>7495936</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\994000_ball_bola_estadium_football_game_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
+<Object>
+<Type>3</Type>
+<Name>Poop</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>0</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>0</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>196</Top>
+<Bottom>220</Bottom>
+<Left>184</Left>
+<Right>208</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>12800</DesignCodeLine>
+<DesignCodeCol>258</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>557453440</DesignCodeLine>
+<DesignCodeCol>552440392</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>121</DesignCodeLine>
+<DesignCodeCol>3</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>741354544</DesignCodeLine>
+<DesignCodeCol>552402992</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\34960_poop_crap_shit_turt_dung_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
+<Object>
+<Type>3</Type>
+<Name>Shower</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>0</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>0</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>109</Top>
+<Bottom>173</Bottom>
+<Left>138</Left>
+<Right>202</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>1046834292</DesignCodeLine>
+<DesignCodeCol>2573</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>5832796</DesignCodeLine>
+<DesignCodeCol>11892</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>222193004</DesignCodeLine>
+<DesignCodeCol>10</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>4079394</DesignCodeLine>
+<DesignCodeCol>7471114</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\9022731_shower_duotone_icon.png</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
+</Object>
 <HGuidelines/>
 <VGuidelines>
 <Guideline>
@@ -3200,8 +4057,8 @@ Please double-click on each item to find out how to install it.</DlgMsg>
 <TimeStampFilesCDRW>0</TimeStampFilesCDRW>
 <TimeStampFilesISO>0</TimeStampFilesISO>
 <ISOImageFile/>
-<SelfExtractingZIPfile>C:\Users\Rexzooly\Documents\AutoPlay Media Studio 8\Output\Indio_Me_Trial.exe</SelfExtractingZIPfile>
-<ZIPMessage>Demo By Gremlin (Rexzooly)</ZIPMessage>
+<SelfExtractingZIPfile>Indio_Me_Trial.exe</SelfExtractingZIPfile>
+<ZIPMessage>Demo By Kingzooly (Rexzooly)</ZIPMessage>
 <ZIPShowProgress>1</ZIPShowProgress>
 <CDVolumeIdentifier>NEWDISC</CDVolumeIdentifier>
 <CacheFileData>1</CacheFileData>

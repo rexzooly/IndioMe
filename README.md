@@ -4,8 +4,9 @@ Indio Me
 This Example shows you the basics of a cyber pet feed, play and clean.
 To win get your XP to 2000+, you can also lose by over feeding your pet or not looking after it.
 
-![Image](gitfile/example.png)
-
+<p align="center">
+  <img src="gitfile/example.png">
+</p>
 
 #### What is this for
 This is for educational reasons, you can use this to learn how to make a basic cyber pet like app

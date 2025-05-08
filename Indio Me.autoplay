@@ -826,9 +826,9 @@ Enjoy the example.</Desc>
 <Options>
 <Text>{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 MS Shell Dlg;}}
 {\colortbl ;\red255\green0\blue0;\red0\green51\blue102;}
-\viewkind4\uc1\pard\cf1\b\f0\fs26 Indio Me v5 - Example\cf0\par
+\viewkind4\uc1\pard\cf1\b\f0\fs26 Indio Me v 0.0.0.5 - Example\cf0\par
 \pard\qc\par
-\b0\fs18 This Software is AS IS and is made to show how AMS\line can be useful/fun, this software is based on Bubble Bubble 2\line character only and we don't own any rights to Bubble Bubble\line and is made in Autoplay Media Studios 8.\par
+\b0\fs18 This Software is AS IS and is made to show how AMS\line can be useful/fun, this software is based on Bubble Bubble 2\line character only and we don't own any rights to Bubble Bubble\line and is made in Autoplay Media Studios 8/9.\par
 \par
 When editing/adding to this example remeber to read the \par
 help file, this example will show you how to make simple \line cyber pet.\par
@@ -841,7 +841,7 @@ This Software is Open Source and free for any Autoplay Media Studio's 9 owner, s
 \par
 \pard\cf1\b Rules:\cf0\par
 \b0\par
-\pard\qc You will lose if you die or lose all our gold you win if you get your XP to 2000 +\b\fs40\par
+\pard\qc You will lose if you die or lose all our gold you win if you get your XP to 2000 +\line Keyboard Keys, Food(\b F\b0 ), Play(\b P\b0 ) &amp; Clean(\b C\b0 )\b\fs40\par
 }
 </Text>
 <TransparentBackground>1</TransparentBackground>
@@ -1116,9 +1116,9 @@ end</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>338</Top>
+<Top>361</Top>
 <Bottom>418</Bottom>
-<Left>238</Left>
+<Left>259</Left>
 <Right>313</Right>
 </Coordinates>
 <Ratios>
@@ -1279,18 +1279,7 @@ Page.Jump("Change logs");</Script>
 <BookMarks count="0">
 </BookMarks>
 </Event>
-<Actions>
-<Action>
-<Type>0</Type>
-<Name>None</Name>
-<Exit>0</Exit>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-</Action>
-</Actions>
+<Actions/>
 <NormalImage>
 <Filename>AutoPlay\Images\34965_question_icon.png</Filename>
 <UseTransColor>0</UseTransColor>
@@ -4159,7 +4148,7 @@ Page.Jump("Change logs");</Script>
 	"0.0.0.2 was a rebuild as I lost the origirnal source code.",
 	"0.0.0.3 was a update to start to include the tutorial/example elements.\r\n\r\n . Tables.\r\n . Pages.\r\n . Audio.\r\n . CheckBox's.\r\n . Functions.\r\n . Images.\r\n . Buttons.\r\n . Plugins.\r\n . Quick Actions.\r\n . RichText.\r\n . Dialog Message.\r\n . Labels.\r\n\r\nAnd other basic AMS actions and functions.",
 	"0.0.0.4 was a update to add a few more things.\r\n\r\n . ComboBox.\r\n . Paragraph.\r\n . Window(Set Text).\r\n\r\nAdded the Change Log page and updated the mute option.",
-	"0.0.0.5 was updated fpr AMS 9x.\r\n\r\n . Removing the need for any plugin.\r\n . Added On Key funtions"
+	"0.0.0.5 was updated fpr AMS 9x.\r\n\r\n . Removing the need for any plugin.\r\n . Added On Key funtions.\r\n . Fixed version number on main app."
 }</Script>
 <TreeStates>
 <TreeState>0</TreeState>
@@ -4167,7 +4156,7 @@ Page.Jump("Change logs");</Script>
 <TreeState>0</TreeState>
 </TreeStates>
 <DesignCodeLine>6</DesignCodeLine>
-<DesignCodeCol>81</DesignCodeCol>
+<DesignCodeCol>146</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -4297,100 +4286,6 @@ Page.Jump("Change logs");</Script>
 <BookMarks count="0">
 </BookMarks>
 </Event>
-<Object>
-<Type>3</Type>
-<Name>Image1</Name>
-<VisibleAtDesignTime>1</VisibleAtDesignTime>
-<VisibleAtRunTime>1</VisibleAtRunTime>
-<Locked>0</Locked>
-<Enabled>0</Enabled>
-<ToolTip/>
-<Cursor>0</Cursor>
-<Group>0</Group>
-<MaintainAspectRatio>1</MaintainAspectRatio>
-<Pin>0</Pin>
-<TabIndex>-1</TabIndex>
-<AutoResize>0</AutoResize>
-<Coordinates>
-<Top>336</Top>
-<Bottom>416</Bottom>
-<Left>236</Left>
-<Right>311</Right>
-</Coordinates>
-<Ratios>
-<WidthRatio>-1.000000</WidthRatio>
-<HeightRatio>-1.000000</HeightRatio>
-</Ratios>
-<Event>
-<Name>On Click</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>1634689536</DesignCodeLine>
-<DesignCodeCol>1073767538</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Right-Click</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Enter</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>258770936</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Leave</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>25714</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Actions/>
-<NormalImage>
-<Filename>AutoPlay\Images\649918.jpeg</Filename>
-<UseTransColor>0</UseTransColor>
-<TransClr>16777215</TransClr>
-<TransTolerance>10</TransTolerance>
-<Opacity>100</Opacity>
-<HTMode>0</HTMode>
-</NormalImage>
-<MouseOverSndMode>0</MouseOverSndMode>
-<MouseOverSound/>
-<MouseClickSndMode>0</MouseClickSndMode>
-<MouseClickSound/>
-</Object>
 <Object>
 <Type>3</Type>
 <Name>Image2</Name>
@@ -4716,6 +4611,100 @@ On Show has the table with all the change log information</Body>
 <MouseClickSndMode>0</MouseClickSndMode>
 <MouseClickSound/>
 </Text>
+</Object>
+<Object>
+<Type>3</Type>
+<Name>Image1</Name>
+<VisibleAtDesignTime>1</VisibleAtDesignTime>
+<VisibleAtRunTime>1</VisibleAtRunTime>
+<Locked>0</Locked>
+<Enabled>1</Enabled>
+<ToolTip/>
+<Cursor>0</Cursor>
+<Group>0</Group>
+<MaintainAspectRatio>1</MaintainAspectRatio>
+<Pin>0</Pin>
+<TabIndex>-1</TabIndex>
+<AutoResize>0</AutoResize>
+<Coordinates>
+<Top>361</Top>
+<Bottom>418</Bottom>
+<Left>259</Left>
+<Right>313</Right>
+</Coordinates>
+<Ratios>
+<WidthRatio>-1.000000</WidthRatio>
+<HeightRatio>-1.000000</HeightRatio>
+</Ratios>
+<Event>
+<Name>On Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>1634689536</DesignCodeLine>
+<DesignCodeCol>1073767538</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Right-Click</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Enter</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>258770936</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Event>
+<Name>On Leave</Name>
+<Args/>
+<Script/>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>25714</DesignCodeCol>
+<BookMarks count="0">
+</BookMarks>
+</Event>
+<Actions/>
+<NormalImage>
+<Filename>AutoPlay\Images\649918.jpeg</Filename>
+<UseTransColor>0</UseTransColor>
+<TransClr>16777215</TransClr>
+<TransTolerance>10</TransTolerance>
+<Opacity>100</Opacity>
+<HTMode>0</HTMode>
+</NormalImage>
+<MouseOverSndMode>0</MouseOverSndMode>
+<MouseOverSound/>
+<MouseClickSndMode>0</MouseClickSndMode>
+<MouseClickSound/>
 </Object>
 <HGuidelines/>
 <VGuidelines/>

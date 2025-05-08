@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="iso-8859-1"?><DocumentData>
-<ProductVersion>8.2.0.0</ProductVersion>
+<ProductVersion>9.0.1.0</ProductVersion>
 <ProductID>{ABF9EF9E-ECF6-4019-8A3E-908A6CFF4D1A}</ProductID>
-<IRProductName>AutoPlay Media Studio 8</IRProductName>
+<IRProductName>AutoPlay Media Studio 9</IRProductName>
 <ProductType>Commercial</ProductType>
 <DocInfo>
 <Title>Indio Me(Bub)</Title>
 <Author>Rexzooly Kai Black</Author>
 <Company/>
-<Copyright>Copyright © 2023</Copyright>
-<URL>rexzooly.co.uk</URL>
+<Copyright>Copyright © 2025</Copyright>
+<URL>4213.co.uk</URL>
 <Email/>
 <Comments>This example is for you to learn how to create a simple cyber pet like game.
 
@@ -18,7 +18,7 @@ Please read the manual/help file if your stuck before you go crazy asking people
 
 Enjoy the example.</Comments>
 <CreatedVersion>8.1.0.0 (Professional Edition)</CreatedVersion>
-<LastSavedVersion>8.2.0.0 (Professional Edition Commercial)</LastSavedVersion>
+<LastSavedVersion>9.0.1.0 (Professional Edition Commercial)</LastSavedVersion>
 </DocInfo>
 <ProjectInfo ToolTipStyle="0">
 <Office2007Theme Theme="5"/>
@@ -80,7 +80,7 @@ Enjoy the example.</Comments>
 -- but it's got important information for this software to work
 Bub = {
 	-- Example Version
-	Version = '0.0.0.4',
+	Version = '0.0.0.5',
 	-- Game Defaults
 	Game = {
 		-- A score/stats table
@@ -115,7 +115,7 @@ Bub = {
 function Bub.Feed()
 	if Bub.Game.Active.IsActive == true then
 		if Bub.Cost()then
-			GlobalTimer.Stop(Feed);
+			Page.StopTimer(1);
 			sMode = Math.Random(1, 3);
 			if Plugin.GetSize("Feed_Bar").Width == 76 then
 				if sMode == 1 then
@@ -148,7 +148,7 @@ function Bub.Feed()
 			Bub.Update(Bub.Game.Gold.Handle, Bub.Game.Gold.Default);
 			Bub.Update(Bub.Game.XP.Handle, Bub.Game.XP.Default);
 			Bub.Update(Bub.Game.Health.Handle, Bub.Game.Health.Default);
-			Feed = GlobalTimer.Start(100, 10000);
+			Page.StartTimer(10000, 1);
 		else
 			return Bub.Lost()
 		end
@@ -162,7 +162,7 @@ end
 function Bub.Play(sMode)
 	if Bub.Game.Active.IsActive == true then
 		if Bub.Cost() then
-			GlobalTimer.Stop(Play);
+			Page.StopTimer(2);
 			sMode = Math.Random(3);
 			if Plugin.GetSize("Play_Bar").Width &lt; 76 then
 				if sMode == 1 then
@@ -185,7 +185,7 @@ function Bub.Play(sMode)
 				Bub.Update(Bub.Game.Gold.Handle, Bub.Game.Gold.Default);
 				Bub.Update(Bub.Game.XP.Handle, Bub.Game.XP.Default);
 				Bub.Update(Bub.Game.Health.Handle, Bub.Game.Health.Default);
-				Play = GlobalTimer.Start(200, 15000);
+				Page.StartTimer(15000, 2);
 			end
 		else
 			return Bub.Lost();
@@ -200,7 +200,7 @@ end
 function Bub.Clean()
 	if Bub.Game.Active.IsActive == true then
 		if Bub.Cost() then
-			GlobalTimer.Stop(Clean);
+			Page.StopTimer(3);
 			sMode = Math.Random(1, 3);
 			if Plugin.GetSize("Clean_Bar").Width &lt; 76 then
 				if sMode == 1 then
@@ -220,7 +220,7 @@ function Bub.Clean()
 				Bub.Update(Bub.Game.Gold.Handle, Bub.Game.Gold.Default);
 				Bub.Update(Bub.Game.XP.Handle, Bub.Game.XP.Default);
 				Bub.Update(Bub.Game.Health.Handle, Bub.Game.Health.Default);
-				Clean = GlobalTimer.Start(300, 20000);
+				Page.StartTimer(20000, 3);
 			end
 		else
 			return Bub.Lost()
@@ -301,9 +301,9 @@ function Bub.Level()
 	end
 	if Bub.Game.XP.Default &gt;= 2000 then
 		Bub.Game.Active = {IsActive = false, Win = true};
-    	GlobalTimer.Stop(Food);
-		GlobalTimer.Stop(Play);
-		GlobalTimer.Stop(Clean);
+		Page.StopTimer(1);
+		Page.StopTimer(2);
+		Page.StopTimer(3);
 		Bub.Update(Bub.Game.Gold.Handle, 'Won');
 		Bub.Update(Bub.Game.XP.Handle, 'Won');
 		Bub.Update(Bub.Game.Health.Handle, 'Won');
@@ -320,9 +320,9 @@ function Bub.Lost()
 	Bub.Update(Bub.Game.Gold.Handle, 'GAME OVER');
 	Bub.Update(Bub.Game.XP.Handle, 'GAME OVER');
 	Bub.Update(Bub.Game.Health.Handle, 'GAME OVER');
-	GlobalTimer.Stop(Food);
-	GlobalTimer.Stop(Play);
-	GlobalTimer.Stop(Clean);
+	Page.StopTimer(1);
+	Page.StopTimer(2);
+	Page.StopTimer(3);
 	Plugin.SetSize("Feed_Bar", 0, Plugin.GetSize("Feed_Bar").Height); 
 	Plugin.SetSize("Play_Bar", 0, Plugin.GetSize("Play_Bar").Height); 
 	Plugin.SetSize("Clean_Bar", 0, Plugin.GetSize("Clean_Bar").Height);
@@ -332,64 +332,6 @@ function Bub.Lost()
 	xButton.SetEnabled("xButton3", false);
 	Audio.Load(CHANNEL_USER1, "AutoPlay\\Audio\\SE_Attack_Cry.wav", true, false);
 end
-
--- Global Timer Function
-function GlobalTimer.OnTimer(nID)
-    -- Food Check
-    if(nID == 100)then
-  		if Bub.Game.Health.Default &lt;= 0 then
-				return Bub.Lost();
-		else
-	    	if Plugin.GetSize("Feed_Bar").Width == 0 then
-	    		Bub.Game.Health.Default = Bub.Game.Health.Default - 40;
-	    		if Bub.Game.Health.Default &lt;= 0 then
-					Bub.Lost();
-	    		else
-	    			Label.SetText(Bub.Game.Health.Handle, Bub.Game.Health.Default);
-	    		end
-	    	else
-	    		Plugin.SetSize("Feed_Bar", Plugin.GetSize("Feed_Bar").Width-19, Plugin.GetSize("Feed_Bar").Height);    	
-	    	end
-    	end
-		Bub.Level();
-		-- Play Check
-    elseif(nID == 200)then
-  		if Bub.Game.Health.Default &lt;= 0 then
-			return Bub.Lost();
-		else    	
-	    	if Plugin.GetSize("Play_Bar").Width == 0 then
-	    		Bub.Game.Health.Default = Bub.Game.Health.Default - 20;
-	    		if Bub.Game.Health.Default &lt;= 0 then
-					Bub.Lost();
-	    		else
-	    			Label.SetText(Bub.Game.Health.Handle, Bub.Game.Health.Default);
-	    		end
-	    	else
-	    		Plugin.SetSize("Play_Bar", Plugin.GetSize("Play_Bar").Width-19, Plugin.GetSize("Play_Bar").Height);    	
-	    	end
-    	end
-		Bub.Level();
-		-- Clean Check
-    elseif(nID == 300)then
-  		if Bub.Game.Health.Default &lt;= 0 then
-			return Bub.Lost();
-		else
-	    	if Plugin.GetSize("Clean_Bar").Width == 0 then
-	    		Bub.Game.Health.Default = Bub.Game.Health.Default - 10;
-	    		if Bub.Game.Health.Default &lt;= 0 then
-					Bub.Lost();
-	    		else
-	    			Label.SetText(Bub.Game.Health.Handle, Bub.Game.Health.Default);
-	    		end
-	    	else
-	    		Plugin.SetSize("Clean_Bar", Plugin.GetSize("Clean_Bar").Width-19, Plugin.GetSize("Clean_Bar").Height); 
-				Bub.Poop();
-	    	end
-    	end
-		Bub.Level();
-    end
-end
-
 
 -- Move Poop to it's own function as of 0.0.0.4
 -- Returns nothing
@@ -413,7 +355,7 @@ function Bub.Cost()
 end</Script>
 <BookMarks count="0">
 </BookMarks>
-<DesignCodeLine>341</DesignCodeLine>
+<DesignCodeLine>46</DesignCodeLine>
 <DesignCodeCol>3</DesignCodeCol>
 </Globals>
 <Defaults>
@@ -430,9 +372,7 @@ end</Script>
 <Group>
 <CurrentGrounp>0</CurrentGrounp>
 </Group>
-<ActionPlugins>
-<Plugin>GlobalTimer\GlobalTimer.lmd</Plugin>
-</ActionPlugins>
+<ActionPlugins/>
 <TemplateInfo>
 <Name>Indio Me(Bub)</Name>
 <Author/>
@@ -453,15 +393,30 @@ Enjoy the example.</Desc>
 <RTLReadOrder>0</RTLReadOrder>
 </ReadOrder>
 <CodeSigning>
+<CodeSignApps>0</CodeSignApps>
 <CodeSignLocation/>
-<CodeSignCertificateFile/>
-<CodeSignPVKFile/>
-<CodeSignTimeStampURL/>
+<CodeSignWithSHA256>0</CodeSignWithSHA256>
+<CodeSignCertificateFileSHA256/>
+<CodeSignCertificatePasswordSHA256>
+</CodeSignCertificatePasswordSHA256>
+<CodeSignTimeStampURLSHA256/>
+<CodeSignArgumentsSHA256/>
+<CodeSignWithSHA1>1</CodeSignWithSHA1>
+<CodeSignTimeStampURLSHA1/>
+<CodeSignArgumentsSHA1/>
+<CodeSignSHA1CertificateToUse>1</CodeSignSHA1CertificateToUse>
+<CodeSignCertificateFileSHA1/>
+<CodeSignCertificatePasswordSHA1>
+</CodeSignCertificatePasswordSHA1>
 <CodeSignDescription/>
 <CodeSignDescriptionURL/>
-<CodeSignApps>0</CodeSignApps>
-<CodeSigningTool>0</CodeSigningTool>
-<Arguments/>
+<CodeSignUsePFXCertificate>0</CodeSignUsePFXCertificate>
+<CodeSignAppendSecondSignature>0</CodeSignAppendSecondSignature>
+<CodeSignUseSHA512>0</CodeSignUseSHA512>
+<CodeSignCertificateSubject/>
+<CodeSignSecondTimestampURL/>
+<CodeSignCertificateThumbprint/>
+<CodeSignShowToolWindow>0</CodeSignShowToolWindow>
 </CodeSigning>
 <RuntimeSkin>
 <UseSkinFile>1</UseSkinFile>
@@ -474,6 +429,10 @@ Enjoy the example.</Desc>
 <Oracle>0</Oracle>
 <ODBC>0</ODBC>
 <PostgreSQL>0</PostgreSQL>
+<Firebird>0</Firebird>
+<LuaSocket>0</LuaSocket>
+<LuaSec>0</LuaSec>
+<LuaFileSystem>0</LuaFileSystem>
 </Databases>
 <Event>
 <Name>On Startup</Name>
@@ -538,11 +497,11 @@ Enjoy the example.</Desc>
 <FileVer1>0</FileVer1>
 <FileVer2>0</FileVer2>
 <FileVer3>0</FileVer3>
-<FileVer4>3</FileVer4>
+<FileVer4>5</FileVer4>
 <ProductVer1>0</ProductVer1>
 <ProductVer2>0</ProductVer2>
 <ProductVer3>0</ProductVer3>
-<ProductVer4>3</ProductVer4>
+<ProductVer4>5</ProductVer4>
 <Comments>Created with AutoPlay Media Studio</Comments>
 <Company>Powered by AutoPlay Media Studio</Company>
 <FileDescription>www.indigorose.com</FileDescription>
@@ -867,7 +826,7 @@ Enjoy the example.</Desc>
 <Options>
 <Text>{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 MS Shell Dlg;}}
 {\colortbl ;\red255\green0\blue0;\red0\green51\blue102;}
-\viewkind4\uc1\pard\cf1\b\f0\fs26 Indio Me v4 - Example\cf0\par
+\viewkind4\uc1\pard\cf1\b\f0\fs26 Indio Me v5 - Example\cf0\par
 \pard\qc\par
 \b0\fs18 This Software is AS IS and is made to show how AMS\line can be useful/fun, this software is based on Bubble Bubble 2\line character only and we don't own any rights to Bubble Bubble\line and is made in Autoplay Media Studios 8.\par
 \par
@@ -875,11 +834,10 @@ When editing/adding to this example remeber to read the \par
 help file, this example will show you how to make simple \line cyber pet.\par
 \cf1\par
 \pard\b Thanks by:\line\cf0\par
-\pard\qc\cf2 Reteset\cf0\b0 , Global Timer Plugin.\par
-\cf2\b RizlaUK\cf0 ,\b0  GroupBox was also by this great man with Proxy Dll by Reteset.\par
-\cf2\b IndigoRose\cf0\b0 , Autoplay Media Studio's 8 Software/Runtime.\par
+\pard\qc\b0\par
+\cf2\b IndigoRose\cf0\b0 , Autoplay Media Studio's 9 Software/Runtime.\par
 \par
-This Software is Open Source and free for any Autoplay Media Studio's 8 owner, so enjoy.\par
+This Software is Open Source and free for any Autoplay Media Studio's 9 owner, so enjoy.\par
 \par
 \pard\cf1\b Rules:\cf0\par
 \b0\par
@@ -1144,96 +1102,6 @@ end</Script>
 </Font>
 </Object>
 <Object>
-<Type>40</Type>
-<Name>Plugin1</Name>
-<VisibleAtDesignTime>1</VisibleAtDesignTime>
-<VisibleAtRunTime>1</VisibleAtRunTime>
-<Locked>0</Locked>
-<Enabled>1</Enabled>
-<ToolTip/>
-<Cursor>0</Cursor>
-<Group>0</Group>
-<MaintainAspectRatio>0</MaintainAspectRatio>
-<Pin>0</Pin>
-<TabIndex>-1</TabIndex>
-<AutoResize>0</AutoResize>
-<Coordinates>
-<Top>11</Top>
-<Bottom>386</Bottom>
-<Left>6</Left>
-<Right>306</Right>
-</Coordinates>
-<Ratios>
-<WidthRatio>-1.000000</WidthRatio>
-<HeightRatio>-1.000000</HeightRatio>
-</Ratios>
-<Event>
-<Name>On Click</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On RightClick</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Enter</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Leave</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Actions/>
-<PLUGIN>
-<DLLFile>GroupBox\GroupBox.apo</DLLFile>
-<CustomData>3,0,Indio Me 0.0.0.4,0,2,490871824,@Malgun Gothic,9,1,0,0,0</CustomData>
-</PLUGIN>
-<MouseOverSndMode>0</MouseOverSndMode>
-<MouseOverSound/>
-<MouseClickSndMode>0</MouseClickSndMode>
-<MouseClickSound/>
-</Object>
-<Object>
 <Type>3</Type>
 <Name>Image1</Name>
 <VisibleAtDesignTime>1</VisibleAtDesignTime>
@@ -1248,10 +1116,10 @@ end</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>341</Top>
-<Bottom>421</Bottom>
-<Left>241</Left>
-<Right>316</Right>
+<Top>338</Top>
+<Bottom>418</Bottom>
+<Left>238</Left>
+<Right>313</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -1315,7 +1183,7 @@ end</Script>
 </Event>
 <Actions/>
 <NormalImage>
-<Filename>AutoPlay\Images\default_header_avata.png</Filename>
+<Filename>AutoPlay\Images\649918.jpeg</Filename>
 <UseTransColor>0</UseTransColor>
 <TransClr>16777215</TransClr>
 <TransTolerance>10</TransTolerance>
@@ -1411,7 +1279,18 @@ Page.Jump("Change logs");</Script>
 <BookMarks count="0">
 </BookMarks>
 </Event>
-<Actions/>
+<Actions>
+<Action>
+<Type>0</Type>
+<Name>None</Name>
+<Exit>0</Exit>
+<TreeStates>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+<TreeState>0</TreeState>
+</TreeStates>
+</Action>
+</Actions>
 <NormalImage>
 <Filename>AutoPlay\Images\34965_question_icon.png</Filename>
 <UseTransColor>0</UseTransColor>
@@ -1467,45 +1346,98 @@ Page.Jump("Change logs");</Script>
 Bub.Update(Bub.Game.XP.Handle, Bub.Game.XP.Default);
 Bub.Update(Bub.Game.Health.Handle, Bub.Game.Health.Default);
 
-Food = GlobalTimer.Start(100, 10000);
-Play = GlobalTimer.Start(200, 15000);
-Clean = GlobalTimer.Start(300, 20000);</Script>
+Page.StartTimer(10000, 1);
+Page.StartTimer(15000, 2);
+Page.StartTimer(20000, 3);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>5</DesignCodeLine>
-<DesignCodeCol>7</DesignCodeCol>
+<DesignCodeLine>6</DesignCodeLine>
+<DesignCodeCol>1</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
 <Event>
 <Name>On Close</Name>
 <Args/>
-<Script>GlobalTimer.Stop(Feed);
-GlobalTimer.Stop(Play);
-GlobalTimer.Stop(Clean);</Script>
+<Script>Page.StopTimer(1);
+Page.StopTimer(2);
+Page.StopTimer(3);</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
 <DesignCodeLine>2</DesignCodeLine>
-<DesignCodeCol>24</DesignCodeCol>
+<DesignCodeCol>18</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
 <Event>
 <Name>On Timer</Name>
 <Args>number e_ID</Args>
-<Script/>
+<Script>if e_ID == 1 then
+	if Bub.Game.Health.Default &lt;= 0 then
+		return Bub.Lost();
+	else
+		if Plugin.GetSize("Feed_Bar").Width == 0 then
+			Bub.Game.Health.Default = Bub.Game.Health.Default - 40;
+			if Bub.Game.Health.Default &lt;= 0 then
+				Bub.Lost();
+			else
+				Label.SetText(Bub.Game.Health.Handle, Bub.Game.Health.Default);
+			end
+		else
+			Plugin.SetSize("Feed_Bar", Plugin.GetSize("Feed_Bar").Width-19, Plugin.GetSize("Feed_Bar").Height);    	
+		end
+	end
+	Bub.Level();
+end
+
+if e_ID == 2 then
+	if Bub.Game.Health.Default &lt;= 0 then
+		return Bub.Lost();
+	else    	
+		if Plugin.GetSize("Play_Bar").Width == 0 then
+			Bub.Game.Health.Default = Bub.Game.Health.Default - 20;
+			if Bub.Game.Health.Default &lt;= 0 then
+				Bub.Lost();
+			else
+				Label.SetText(Bub.Game.Health.Handle, Bub.Game.Health.Default);
+			end
+		else
+			Plugin.SetSize("Play_Bar", Plugin.GetSize("Play_Bar").Width-19, Plugin.GetSize("Play_Bar").Height);    	
+		end
+	end
+	Bub.Level();
+end
+
+if e_ID == 2 then
+	if Bub.Game.Health.Default &lt;= 0 then
+		return Bub.Lost();
+	else
+		if Plugin.GetSize("Clean_Bar").Width == 0 then
+			Bub.Game.Health.Default = Bub.Game.Health.Default - 10;
+			if Bub.Game.Health.Default &lt;= 0 then
+				Bub.Lost();
+			else
+				Label.SetText(Bub.Game.Health.Handle, Bub.Game.Health.Default);
+			end
+		else
+			Plugin.SetSize("Clean_Bar", Plugin.GetSize("Clean_Bar").Width-19, Plugin.GetSize("Clean_Bar").Height); 
+			Bub.Poop();
+		end
+	end
+	Bub.Level();
+end</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeLine>37</DesignCodeLine>
 <DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
@@ -1555,14 +1487,28 @@ GlobalTimer.Stop(Clean);</Script>
 <Event>
 <Name>On Key</Name>
 <Args>number e_Key, table e_Modifiers</Args>
-<Script/>
+<Script>if e_Key == 70 then
+	Bub.Feed();
+	Image.SetVisible("Food", false);
+end
+
+if e_Key == 80 then
+	Bub.Play();
+	Image.SetVisible("Play", false);
+end
+
+if e_Key == 67 then
+	Bub.Clean();
+	Image.SetVisible("Poop", false);
+	Image.SetVisible("Shower", false);
+end</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
+<DesignCodeLine>14</DesignCodeLine>
+<DesignCodeCol>3</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -1609,96 +1555,6 @@ GlobalTimer.Stop(Clean);</Script>
 </BookMarks>
 </Event>
 <Object>
-<Type>40</Type>
-<Name>Plugin1</Name>
-<VisibleAtDesignTime>1</VisibleAtDesignTime>
-<VisibleAtRunTime>1</VisibleAtRunTime>
-<Locked>1</Locked>
-<Enabled>1</Enabled>
-<ToolTip/>
-<Cursor>0</Cursor>
-<Group>0</Group>
-<MaintainAspectRatio>0</MaintainAspectRatio>
-<Pin>0</Pin>
-<TabIndex>-1</TabIndex>
-<AutoResize>0</AutoResize>
-<Coordinates>
-<Top>11</Top>
-<Bottom>330</Bottom>
-<Left>15</Left>
-<Right>300</Right>
-</Coordinates>
-<Ratios>
-<WidthRatio>-1.000000</WidthRatio>
-<HeightRatio>-1.000000</HeightRatio>
-</Ratios>
-<Event>
-<Name>On Click</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>3145774</DesignCodeLine>
-<DesignCodeCol>25714</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On RightClick</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>5857125</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Enter</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Leave</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Actions/>
-<PLUGIN>
-<DLLFile>GroupBox\GroupBox.apo</DLLFile>
-<CustomData>0,3,Indio Me 0.0.0.4,16777215,2,490871848,@Malgun Gothic,9,1,0,0,0</CustomData>
-</PLUGIN>
-<MouseOverSndMode>0</MouseOverSndMode>
-<MouseOverSound/>
-<MouseClickSndMode>0</MouseClickSndMode>
-<MouseClickSound/>
-</Object>
-<Object>
 <Type>20</Type>
 <Name>xButton1</Name>
 <VisibleAtDesignTime>1</VisibleAtDesignTime>
@@ -1732,7 +1588,7 @@ Image.SetVisible("Food", false);</Script>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>1</DesignCodeLine>
+<DesignCodeLine>0</DesignCodeLine>
 <DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
@@ -1858,7 +1714,7 @@ Image.SetVisible("Play", false);</Script>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>1</DesignCodeLine>
+<DesignCodeLine>0</DesignCodeLine>
 <DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
@@ -1985,8 +1841,8 @@ Image.SetVisible("Shower", false);</Script>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>2</DesignCodeLine>
-<DesignCodeCol>32</DesignCodeCol>
+<DesignCodeLine>0</DesignCodeLine>
+<DesignCodeCol>0</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -2478,7 +2334,7 @@ Image.SetVisible("Shower", false);</Script>
 <VisibleAtRunTime>1</VisibleAtRunTime>
 <Locked>0</Locked>
 <Enabled>1</Enabled>
-<ToolTip>Click here to be taken to the AutoPlay Media Studios 8 Product Page</ToolTip>
+<ToolTip>Click here to be taken to the AutoPlay Media Studios Product Page</ToolTip>
 <Cursor>1</Cursor>
 <Group>0</Group>
 <MaintainAspectRatio>1</MaintainAspectRatio>
@@ -4245,18 +4101,7 @@ Page.Jump("Change logs");</Script>
 <BookMarks count="0">
 </BookMarks>
 </Event>
-<Actions>
-<Action>
-<Type>0</Type>
-<Name>None</Name>
-<Exit>0</Exit>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-</Action>
-</Actions>
+<Actions/>
 <NormalImage>
 <Filename>AutoPlay\Images\34965_question_icon.png</Filename>
 <UseTransColor>0</UseTransColor>
@@ -4313,15 +4158,16 @@ Page.Jump("Change logs");</Script>
 	"0.0.0.1 was created by myself Kingzooly as just a little demo to show it could be done at the time in PE, once I created it I wanted to make it a example or tutoral.",
 	"0.0.0.2 was a rebuild as I lost the origirnal source code.",
 	"0.0.0.3 was a update to start to include the tutorial/example elements.\r\n\r\n . Tables.\r\n . Pages.\r\n . Audio.\r\n . CheckBox's.\r\n . Functions.\r\n . Images.\r\n . Buttons.\r\n . Plugins.\r\n . Quick Actions.\r\n . RichText.\r\n . Dialog Message.\r\n . Labels.\r\n\r\nAnd other basic AMS actions and functions.",
-	"0.0.0.4 was a update to add a few more things.\r\n\r\n . ComboBox.\r\n . Paragraph.\r\n . Window(Set Text).\r\n\r\nAdded the Change Log page and updated the mute option."
+	"0.0.0.4 was a update to add a few more things.\r\n\r\n . ComboBox.\r\n . Paragraph.\r\n . Window(Set Text).\r\n\r\nAdded the Change Log page and updated the mute option.",
+	"0.0.0.5 was updated fpr AMS 9x.\r\n\r\n . Removing the need for any plugin.\r\n . Added On Key funtions"
 }</Script>
 <TreeStates>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 <TreeState>0</TreeState>
 </TreeStates>
-<DesignCodeLine>4</DesignCodeLine>
-<DesignCodeCol>262</DesignCodeCol>
+<DesignCodeLine>6</DesignCodeLine>
+<DesignCodeCol>81</DesignCodeCol>
 <BookMarks count="0">
 </BookMarks>
 </Event>
@@ -4452,96 +4298,6 @@ Page.Jump("Change logs");</Script>
 </BookMarks>
 </Event>
 <Object>
-<Type>40</Type>
-<Name>Plugin1</Name>
-<VisibleAtDesignTime>1</VisibleAtDesignTime>
-<VisibleAtRunTime>1</VisibleAtRunTime>
-<Locked>0</Locked>
-<Enabled>1</Enabled>
-<ToolTip/>
-<Cursor>0</Cursor>
-<Group>0</Group>
-<MaintainAspectRatio>0</MaintainAspectRatio>
-<Pin>0</Pin>
-<TabIndex>-1</TabIndex>
-<AutoResize>0</AutoResize>
-<Coordinates>
-<Top>11</Top>
-<Bottom>415</Bottom>
-<Left>6</Left>
-<Right>306</Right>
-</Coordinates>
-<Ratios>
-<WidthRatio>-1.000000</WidthRatio>
-<HeightRatio>-1.000000</HeightRatio>
-</Ratios>
-<Event>
-<Name>On Click</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On RightClick</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Enter</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Event>
-<Name>On Leave</Name>
-<Args/>
-<Script/>
-<TreeStates>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-<TreeState>0</TreeState>
-</TreeStates>
-<DesignCodeLine>0</DesignCodeLine>
-<DesignCodeCol>0</DesignCodeCol>
-<BookMarks count="0">
-</BookMarks>
-</Event>
-<Actions/>
-<PLUGIN>
-<DLLFile>GroupBox\GroupBox.apo</DLLFile>
-<CustomData>3,0,Indio Me 0.0.0.4,0,2,490871824,@Malgun Gothic,9,1,0,0,0</CustomData>
-</PLUGIN>
-<MouseOverSndMode>0</MouseOverSndMode>
-<MouseOverSound/>
-<MouseClickSndMode>0</MouseClickSndMode>
-<MouseClickSound/>
-</Object>
-<Object>
 <Type>3</Type>
 <Name>Image1</Name>
 <VisibleAtDesignTime>1</VisibleAtDesignTime>
@@ -4556,10 +4312,10 @@ Page.Jump("Change logs");</Script>
 <TabIndex>-1</TabIndex>
 <AutoResize>0</AutoResize>
 <Coordinates>
-<Top>340</Top>
-<Bottom>420</Bottom>
-<Left>240</Left>
-<Right>315</Right>
+<Top>336</Top>
+<Bottom>416</Bottom>
+<Left>236</Left>
+<Right>311</Right>
 </Coordinates>
 <Ratios>
 <WidthRatio>-1.000000</WidthRatio>
@@ -4623,7 +4379,7 @@ Page.Jump("Change logs");</Script>
 </Event>
 <Actions/>
 <NormalImage>
-<Filename>AutoPlay\Images\default_header_avata.png</Filename>
+<Filename>AutoPlay\Images\649918.jpeg</Filename>
 <UseTransColor>0</UseTransColor>
 <TransClr>16777215</TransClr>
 <TransTolerance>10</TransTolerance>
@@ -4840,6 +4596,10 @@ Paragraph.SetText("changelog", Change[GetID]);
 <ComboItem>
 <Text>0.0.0.4</Text>
 <Data>4</Data>
+</ComboItem>
+<ComboItem>
+<Text>0.0.0.5</Text>
+<Data>5</Data>
 </ComboItem>
 </ComboItems>
 </Object>

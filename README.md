@@ -7,6 +7,7 @@ To win get your XP to 2000+, you can also lose by over feeding your pet or not l
 <p align="center">
   <img src="./example.png">
 </p>
+Images are based on 0.0.0.4, 0.0.0.5 looks just a little bit different.
 
 #### What is this for
 This is for educational reasons, you can use this to learn how to make a basic cyber pet like app
